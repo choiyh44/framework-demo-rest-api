@@ -13,6 +13,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import kr.co.ensmart.frameworkdemo.common.ApplicationContextWrapper;
 import kr.co.ensmart.frameworkdemo.common.dto.sample.Sample;
 import lombok.extern.slf4j.Slf4j;
 
