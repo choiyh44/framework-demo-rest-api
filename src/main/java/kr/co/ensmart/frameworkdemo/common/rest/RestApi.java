@@ -24,6 +24,8 @@ import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import kr.co.ensmart.frameworkdemo.common.token.TokenService;
 import kr.co.ensmart.frameworkdemo.common.util.JsonUtils;
 
@@ -104,7 +106,20 @@ public abstract class RestApi {
 		return execute(null, HttpMethod.GET, responseReference.getType());
 	}
 	
-	public <T> RestResponse<T> post(Object request, Class<T> type) {
+    public <T> RestResponse<T> get(Object request, ParameterizedTypeReference<T> responseReference) {
+        setObjectAsQueryParam(request);
+        return execute(request, HttpMethod.GET, responseReference.getType());
+    }
+
+    private void setObjectAsQueryParam(Object request) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        if (request != null) {
+            Map<String, Object> map = objectMapper.convertValue(request, Map.class);
+            map.entrySet().stream().forEach(entry -> this.uriComponentsBuilder.queryParam(entry.getKey(), entry.getValue()));
+        }
+    }
+    
+    public <T> RestResponse<T> post(Object request, Class<T> type) {
 		return execute(request, HttpMethod.POST, type);
 	}
 	
